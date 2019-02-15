@@ -1,0 +1,137 @@
+
+{	"extensionName": "LCD I2C Eklentisi",
+	"description": "I2C üzerinden 16x2 veya 20x4 LCD ekran bağlantısı sağlar",
+	"version": "1.0",
+	"author": "Mustafa Burak Kalkan (mburakkalkan@gmail.com)",
+	"homepage": "https://github.com/mburakkalkan/mblock-lcd-i2c",
+	"sort": 0,
+	"javascriptURL":"js/LCD_I2C.js",
+	"firmware":"1.0",
+	"extensionPort":0,
+	"blockSpecs": [
+		[
+			"w",
+			"I2C %d.adres adresli %d.lcdtipsutun x %d.lcdtipsatir LCD ekranı başlat",
+			"LCD_I2C_baslat",
+			"0x27",
+			16,
+			2,
+			{
+				"setup":"LCD_I2C_{0}.init();\nLCD_I2C_{0}.backlight();\n",
+				"inc":"#include \"LiquidCrystal_I2C.h\"\n",
+				"def":"LiquidCrystal_I2C LCD_I2C_{0}({0}, {1}, {2});\n",
+				"work":"",
+				"loop":""
+			}
+		],
+		[
+			"w",
+			"I2C %d.adres adresli ekranda satır %d.satir sütun %d.sutun konumuna %s yaz",
+			"LCD_I2C_yaz",
+			"0x27",
+			1,
+			1,
+			"Merhaba!",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":"LCD_I2C_{0}.setCursor({2} - 1, {1} - 1);\nLCD_I2C_{0}.print({3});\n",
+				"loop":""
+			}
+		],
+		[
+			"w",
+			"I2C %d.adres adresli ekranı temizle",
+			"LCD_I2C_temizle",
+			"0x27",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":"LCD_I2C_{0}.clear();\n",
+				"loop":""
+			}
+		],
+		[
+			"w",
+			"I2C %d.adres adresli ekranın ışığını %d.ackapat",
+			"LCD_I2C_arkaisik",
+			"0x27",
+			"kapat",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":"LCD_I2C_{0}.setBacklight({1});\n",
+				"loop":""
+			}
+		],
+		[
+			"w",
+			"I2C %d.adres adresli ekranı %d.ackapat",
+			"LCD_I2C_ekran",
+			"0x27",
+			"kapat",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"void ekranDurumu(bool durum) {\n if(durum == 1) LCD_I2C_{0}.display();\n else LCD_I2C_{0}.noDisplay(); }\n",
+				"work":"ekranDurumu({1});\n",
+				"loop":""
+			}
+		],
+		[
+			"w",
+			"I2C %d.adres adresli ekranda %d.imlec",
+			"LCD_I2C_imlec",
+			"0x27",
+			"sabit imleç göster",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"void imlecAyarla(LiquidCrystal_I2C *pLcd, int durum){switch (durum) {\n case 1: pLcd->cursor(); break;\n case 2: pLcd->noCursor(); break;\n case 3: pLcd->blink(); break;\n case 4: pLcd->noBlink(); break;\n } \n}",
+				"work":"imlecAyarla(&LCD_I2C_{0}, {1});\n",
+				"loop":""
+			}
+		],
+		[
+			"w",
+			"I2C %d.adres adresli ekranda içeriği %d.kaydir kaydır",
+			"LCD_I2C_kaydir",
+			"0x27",
+			"sağa",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"void kaydir(bool yon) {\n if(yon == 1) LCD_I2C_{0}.scrollDisplayRight();\n else LCD_I2C_{0}.scrollDisplayLeft(); }\n",
+				"work":"kaydir({1});\n",
+				"loop":""
+			}
+		]
+	],
+	"menus": {
+		"ackapat":["aç","kapat"],
+		"imlec":["sabit imleç göster","sabit imleci gizle","yanıp sönen imleç göster","yanıp sönen imleci gizle"],
+		"satir":[1,2],
+		"sutun":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
+		"adres":["0x27","0x30","0x38","0x20","0x3F"],
+		"kaydir":["sağa", "sola"],
+		"lcdtipsatir":[2,4],
+		"lcdtipsutun":[16,20]
+	},
+	"values":{
+		"aç":1,
+		"kapat":0,
+		"sabit imleç göster":1,
+		"sabit imleci gizle":2,
+		"yanıp sönen imleç göster":3,
+		"yanıp sönen imleci gizle":4,
+		"sağa":1,
+		"sola":0
+	},
+	"translators":{
+		"en_US":{
+		}
+	}
+}
